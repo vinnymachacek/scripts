@@ -18,11 +18,14 @@ else
      SERVER_LIST=$@
 fi
 
+# specify some options
+# use option -oStrictHostKeyChecking=no to get rid of that annoying RSA warning.
+SSH_OPTIONS="-oStrictHostKeyChecking=no"
+
 # do it!
 for SERVER in $SERVER_LIST; do
      echo ""
      echo "Running '$COMMAND' on $SERVER"
-# use option -oStrictHostKeyChecking=no to get rid of that annoying RSA warning.  We control these boxes lol
-     echo $COMMAND | ssh -oStrictHostKeyChecking=no $SERVER /bin/bash
+     echo $COMMAND | ssh $SSH_OPTIONS $SERVER /bin/bash
      echo "----------------------"
 done
