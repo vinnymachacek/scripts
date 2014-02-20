@@ -1,0 +1,42 @@
+#!/bin/bash
+
+if [ -f $1 ]; then
+     SERVERS=$(cat $1)
+else
+     SERVERS=$@
+fi
+
+. /etc/init.d/functions
+
+###FORMAT FOR LIST: <item1>|<item2>##########
+EXCEPTION_LIST='kits'
+
+
+SSH_OPTIONS="ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=0 -o ConnectTimeout=2"
+
+
+
+for i in ${SERVERS}; do
+    echo; echo $i
+    CONNECTION_TEST=`${SSH_OPTIONS} ${i} hostname`
+    if [ $? -eq 0 ]; then
+        MOUNTS=`${SSH_OPTIONS} $i df -hP | grep -vE "Filesystem|/dev/shm|${EXCEPTION_LIST}" | awk '{print $6}'`
+        for j in ${MOUNTS}; do
+            ${SSH_OPTIONS} ${i} touch ${j}/touchtest111.txt
+            if [ $? -eq 0 ]; then
+              echo "  Touch file on ${j} succeeded `echo_success`"
+            else
+              echo "  Touch file on ${j} failed `echo_failure`"
+            fi
+            ${SSH_OPTIONS} ${i} rm -f ${j}/touchtest111.txt
+            if [ $? -eq 0 ]; then
+              echo "  Touch delete on ${j} succeeded `echo_success`"
+            else
+              echo "  Touch delete on ${j} failed `echo_failure`"
+            fi
+        done
+    else
+        echo "  ERROR: Can't connect `echo failure`"
+    fi
+done
+
