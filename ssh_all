@@ -22,6 +22,7 @@ fi
 for SERVER in $SERVER_LIST; do
      echo ""
      echo "Running '$COMMAND' on $SERVER"
-     echo $COMMAND | ssh $SERVER /bin/bash
+# use option -oStrictHostKeyChecking=no to get rid of that annoying RSA warning.  We control these boxes lol
+     echo $COMMAND | ssh -oStrictHostKeyChecking=no $SERVER /bin/bash
      echo "----------------------"
 done
