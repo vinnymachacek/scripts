@@ -6,6 +6,9 @@
 EXCEPTION_LIST='kits'
 SSH_OPTIONS="ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=0 -o ConnectTimeout=2"
 
+# print some usage text if no arguments are given
+[[ -n "$1" ]] || { echo "Usage: fsck-ro [server_list.txt] OR [server1 server2 server3] ..."; exit 0 ; }
+
 # if next arg is a file, then use that as the list of servers
 # otherwise use the remaining args as your server list
 if [ -f $1 ]; then
