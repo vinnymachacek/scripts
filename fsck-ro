@@ -1,19 +1,18 @@
 #!/bin/bash
 
+. /etc/init.d/functions
+
+# specifiy some options
+EXCEPTION_LIST='kits'
+SSH_OPTIONS="ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=0 -o ConnectTimeout=2"
+
+# if next arg is a file, then use that as the list of servers
+# otherwise use the remaining args as your server list
 if [ -f $1 ]; then
      SERVERS=$(cat $1)
 else
      SERVERS=$@
 fi
-
-. /etc/init.d/functions
-
-###FORMAT FOR LIST: <item1>|<item2>##########
-EXCEPTION_LIST='kits'
-
-
-SSH_OPTIONS="ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=0 -o ConnectTimeout=2"
-
 
 
 for i in ${SERVERS}; do
