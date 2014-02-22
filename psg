@@ -1,2 +1,2 @@
 #!/bin/bash
-ps -eH|grep -i $1
+ps -e|grep -i $1
