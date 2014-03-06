@@ -1,2 +1,2 @@
 #!/bin/bash
-ypcat hosts | sort -u -k2 | column -t | grep -i "$1"
+ypcat hosts | sort -u -k2 | column -t | grep --color -i "$1"
