@@ -1,2 +1,4 @@
 #!/bin/bash
+# simply run 'yh SEARCH' to search for you case-insensitive string
+# it can, of course, be piped to grep for further refinement
 ypcat hosts | sort -u -k2 | column -t | grep --color -i "$1"
