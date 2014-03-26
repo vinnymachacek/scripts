@@ -1,0 +1,18 @@
+#!/bin/bash
+
+check_health () {
+ypcat hosts | grep --color -i "$search" | sort -k2 | uniq | \
+
+while read line; do
+        ping -c 1 -w1 ` echo $line |grep -o '[0-9]*[0-9]\.[0-9]*[0-9]\.[0-9]*[0-9]\.[0-9]*[0-9]' ` > /dev/null
+        if [ $? -eq 0 ]
+        then
+                echo -e "\033[00;32m"[LIVE]"\t\033[0m"$line
+        else
+                echo -e "\033[00;31m"[DOWN]"\t\033[0m"$line
+        fi;
+done
+}
+
+search=$1
+check_health
