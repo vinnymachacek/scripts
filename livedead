@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+#Check for Command Line parmeters.  -V supresses machines with a Hostname ending in 'v'
 if [[ $2 != "-V" ]]
 then
         command="ypcat hosts"
@@ -21,11 +23,13 @@ while read line; do
 done
 }
 
+#if search term is empty, return usage info.  Prevents pinging EVERYTHING in dosas
 if [[ $1 == "" ]]
 then
         echo -e \tUsage: $0 queryString [-V]
         echo -e "\t-V: Suppress VMs (and entries ending in 'v')"
 else
+        #do it!
         search=$1
         check_health | column -t
 fi;
