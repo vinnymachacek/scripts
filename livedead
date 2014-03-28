@@ -1,7 +1,14 @@
 #!/bin/bash
 
+if [[ $2 != "-V" ]]
+then
+        command="ypcat hosts"
+else
+        command="ypcat hosts | grep -v \"v$\""
+fi
+
 check_health () {
-ypcat hosts | grep --color -i "$search" | sort -k2 | uniq | \
+eval $command | grep --color -i "$search" | sort -k2 | uniq | \
 
 while read line; do
         ping -c 1 -w1 ` echo $line |grep -o '[0-9]*[0-9]\.[0-9]*[0-9]\.[0-9]*[0-9]\.[0-9]*[0-9]' ` > /dev/null
@@ -14,5 +21,11 @@ while read line; do
 done
 }
 
-search=$1
-check_health
+if [[ $1 == "" ]]
+then
+        echo -e \tUsage: $0 queryString [-V]
+        echo -e "\t-V: Suppress VMs (and entries ending in 'v')"
+else
+        search=$1
+        check_health | column -t
+fi;
